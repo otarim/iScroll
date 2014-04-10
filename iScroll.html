@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="gb2312">
+	<title>Document</title>
+	<style>
+	* {margin: 0;padding: 0;}
+	ul {list-style: none;}
+	li,img {vertical-align: top;}
+	p {color: #555;font-size: 12px;padding: 5px 0;text-align: center;}
+	.wrap {height: 488px;width: 168px;border: 1px solid #999;padding: 10px 0;margin: 20px;position: relative;}
+	#inner-content {overflow: hidden;height: 490px;}
+	#inner-content li {width: 148px;padding: 0 10px;}
+	#tool {position: absolute;top: 0;right: 0;width: 5px;height: 100%;}
+	#tool-bar {width: 5px;background: #77c111;position: absolute;top: 0;left: 0;}
+	/*wrap2*/
+	.wrap2 {position: absolute;top: 20px;left: 240px;border: 1px solid #999;padding: 5px;height: 100px;}
+	#inner-content2 {overflow: hidden;white-space: nowrap;width: 598px;}
+	#inner-content2 li {display: inline-block;*display: inline;;*zoom: 1;}
+	#inner-content2 img {float: left;}
+	#inner-content2 div {overflow: hidden;width: 80px;padding: 0 5px;}
+	#inner-content2 p {line-height: 16px;white-space: normal;}
+	#tool2 {position: absolute;bottom: 0;left: 0;height: 5px;width: 100%;}
+	#tool-bar2 {position: absolute;top: 0;left: 0;height: 5px;background: #BF616A;_overflow: hidden;}
+	#tool-prevBtn,#tool-nextBtn {position: absolute;top: -50px;margin-top: -20px;width: 20px;height: 40px;background: rgba(110,110,110,.8);text-decoration: none;line-height: 40px;text-align: center;color: #fff;}
+	#tool-prevBtn {left: 10px;}
+	#tool-nextBtn {right: 10px;}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<ul id="inner-content">
+			<li><img src="http://placekitten.com/150/150" alt="" width="150" height="150"><p>don't mind these details</p></li>
+			<li><img src="http://placekitten.com/150/150" alt="" width="150" height="150"><p>don't mind these details</p></li>
+			<li><img src="http://placekitten.com/150/150" alt="" width="150" height="150"><p>don't mind these details</p></li>
+			<li><img src="http://placekitten.com/150/150" alt="" width="150" height="150"><p>don't mind these details</p></li>
+			<li><img src="http://placekitten.com/150/150" alt="" width="150" height="150"><p>don't mind these details</p></li>
+			<li><img src="http://placekitten.com/150/150" alt="" width="150" height="150"><p>don't mind these details</p></li>
+			<li><img src="http://placekitten.com/150/150" alt="" width="150" height="150"><p>don't mind these details</p></li>
+			<li><img src="http://placekitten.com/150/150" alt="" width="150" height="150"><p>don't mind these details</p></li>
+		</ul>
+		<div id="tool">
+			<span id="tool-bar"></span>
+		</div>
+	</div>
+	<div class="wrap2">
+		<ul id="inner-content2">
+			<li><img src="http://placekitten.com/100/100" alt="" width="100" height="100"><div><h4>yeild~</h4><p>don't mind these details</p></div></li>
+			<li><img src="http://placekitten.com/100/100" alt="" width="100" height="100"><div><h4>yeild~</h4><p>don't mind these details</p></div></li>
+			<li><img src="http://placekitten.com/100/100" alt="" width="100" height="100"><div><h4>yeild~</h4><p>don't mind these details</p></div></li>
+			<li><img src="http://placekitten.com/100/100" alt="" width="100" height="100"><div><h4>yeild~</h4><p>don't mind these details</p></div></li>
+			<li><img src="http://placekitten.com/100/100" alt="" width="100" height="100"><div><h4>yeild~</h4><p>don't mind these details</p></div></li>
+			<li><img src="http://placekitten.com/100/100" alt="" width="100" height="100"><div><h4>yeild~</h4><p>don't mind these details</p></div></li>
+			<li><img src="http://placekitten.com/100/100" alt="" width="100" height="100"><div><h4>yeild~</h4><p>don't mind these details</p></div></li>
+			<li><img src="http://placekitten.com/100/100" alt="" width="100" height="100"><div><h4>yeild~</h4><p>don't mind these details</p></div></li>
+		</ul>
+		<div id="tool2">
+			<span id="tool-bar2"></span>
+			<a href="javascript:;" id="tool-prevBtn">&lt;</a>
+			<a href="javascript:;" id="tool-nextBtn">&gt;</a>
+		</div>
+	</div>
+</body>
+<script src="iScroll.js"></script>
+<script>
+	var contentArea = document.getElementById('inner-content2');
+	iScroll.init({
+        el: document.getElementById('inner-content'),
+        scrollBar: document.getElementById('tool-bar')
+    })
+    iScroll.init({
+        el: document.getElementById('inner-content2'),
+        direction: 'left',
+        scrollBar: document.getElementById('tool-bar2'),
+        scrollTo: 100,
+        prevBtn: document.getElementById('tool-prevBtn'),
+        nextBtn: document.getElementById('tool-nextBtn'),
+        speed: 20,
+        focus: true,
+        init: function(){
+        	try{
+        		console.log('init~')
+        	}catch(e){}
+        },
+        // ajaxBtn: document.getElementById('btn'),
+        done: function(){
+            this.ajax({
+                url: 'ajax.html',
+                type: 'get',
+                onsuccse: function(data){
+                	contentArea.innerHTML += data;
+                },
+                onprocess: function(){
+                },
+                onerror: function(){
+                }
+            })
+        }
+    })
+</script>
+</html>
