@@ -29,27 +29,27 @@
          * @type {Object}
          */
         this.cache = {
-            els_pos:0,
-            sb_pos:0,
-            ms_pos:0,
-            ms_lastpos:0
+            els_pos: 0,
+            sb_pos: 0,
+            ms_pos: 0,
+            ms_lastpos: 0
         };
         /**
          * [CriticalBar 临界处理]
          * @type {Object}
          */
         this.CriticalBar = {
-            low:0,
-            high:0
+            low: 0,
+            high: 0
         };
         this.CriticalEl = {
-            low:0,
-            high:0
+            low: 0,
+            high: 0
         };
         this.initialize();
     }
     iScroll.prototype = {
-        initialize:function() {
+        initialize: function() {
             if (this.focus && !iScroll.isMobile) {
                 this.barFocus();
             }
@@ -74,7 +74,7 @@
                      */
                     iScroll.addEvent(this.ajaxBtn, "click", function(e) {
                         self.doneCallback(self.done);
-                        e.preventDefault ? e.preventDefault() :e.returnValue = false;
+                        e.preventDefault ? e.preventDefault() : e.returnValue = false;
                     });
                 } else {
                     this.activeType = 1;
@@ -84,7 +84,7 @@
             this.initScrollBar();
             this.bind();
         },
-        mousewheel:function(callback) {
+        mousewheel: function(callback) {
             var self = this;
             if ("onmousewheel" in this.el) {
                 this.el.onmousewheel = function(e) {
@@ -100,7 +100,7 @@
                 }, false);
             }
         },
-        initScrollBar:function() {
+        initScrollBar: function() {
             this.buildBar();
             /**
              * 初始化滚动条拖动事件
@@ -112,8 +112,9 @@
                 this.doScrollto();
             }
         },
-        buildBar:function() {
-            var el_parent = this.el.parentNode, ep_style = el_parent.style;
+        buildBar: function() {
+            var el_parent = this.el.parentNode,
+                ep_style = el_parent.style;
             if (iScroll.getStyle(el_parent, "display") === "none") {
                 el_parent.tmpStyle = ep_style.cssText;
                 ep_style.cssText += ";position: absolute;visibility:hidden;display:block;";
@@ -125,15 +126,17 @@
             /**
              * 初始化滚动条
              */
-            var initOffset = this.direction === "top" ? "offsetHeight" :"offsetWidth", sb_style = this.scrollBar.style;
+            var initOffset = this.direction === "top" ? "offsetHeight" : "offsetWidth",
+                sb_style = this.scrollBar.style;
             if (this.prevBtn) {
                 sb_style[this.direction] = (this.CriticalBar.low = this.prevBtn[initOffset]) + "px";
             } else {
                 sb_style[this.direction] = 0;
             }
-            this.elHeight = this.direction === "top" ? this.el.scrollHeight :this.el.scrollWidth;
-            var sbOffset = this.direction === "top" ? "height" :"width", eloffsetHeight = this.el[initOffset];
-            var compareOffset = this.scrollBar.parentNode[initOffset] - (this.prevBtn ? this.prevBtn[initOffset] :0) - (this.nextBtn ? this.nextBtn[initOffset] :0);
+            this.elHeight = this.direction === "top" ? this.el.scrollHeight : this.el.scrollWidth;
+            var sbOffset = this.direction === "top" ? "height" : "width",
+                eloffsetHeight = this.el[initOffset];
+            var compareOffset = this.scrollBar.parentNode[initOffset] - (this.prevBtn ? this.prevBtn[initOffset] : 0) - (this.nextBtn ? this.nextBtn[initOffset] : 0);
             this.cache.sb_pos = Math.floor(this.cache.els_pos * compareOffset / this.elHeight) + this.CriticalBar.low;
             sb_style[this.direction] = this.cache.sb_pos + "px";
             /**
@@ -146,19 +149,27 @@
              * [滚动条速度]
              * @type {[type]}
              */
-            this.barSpeed = (compareOffset - this.scrollBar[initOffset]) * this.speed / (this.CriticalEl.high = this.elHeight - eloffsetHeight, 
-            this.CriticalEl.high) || 0;
-            typeof el_parent.tmpStyle !== "undefined" && (ep_style.cssText = el_parent.tmpStyle, 
-            el_parent.tmpStyle = undefined);
+            this.barSpeed = (compareOffset - this.scrollBar[initOffset]) * this.speed / (this.CriticalEl.high = this.elHeight - eloffsetHeight,
+                this.CriticalEl.high) || 0;
+            typeof el_parent.tmpStyle !== "undefined" && (ep_style.cssText = el_parent.tmpStyle,
+                el_parent.tmpStyle = undefined);
         },
-        initDrag:function() {
-            var isActive = false, scrollBar = this.scrollBar, __cache__ = this.cache, direction = this.direction === "top" ? "scrollTop" :"scrollLeft", msToken = this.direction === "top" ? "clientY" :"clientX", el = this.el, parent = el.parentNode, sb_style = this.scrollBar.style, self = this;
+        initDrag: function() {
+            var isActive = false,
+                scrollBar = this.scrollBar,
+                __cache__ = this.cache,
+                direction = this.direction === "top" ? "scrollTop" : "scrollLeft",
+                msToken = this.direction === "top" ? "clientY" : "clientX",
+                el = this.el,
+                parent = el.parentNode,
+                sb_style = this.scrollBar.style,
+                self = this;
             scrollBar.onmousedown = function(e) {
                 var e = e || w.event;
                 __cache__.ms_pos = e[msToken];
                 isActive = true;
-                parent.mouseout && (iScroll.detachEvent(parent, "mouseover", parent.mouseover), 
-                iScroll.detachEvent(parent, "mouseout", parent.mouseout));
+                parent.mouseout && (iScroll.detachEvent(parent, "mouseover", parent.mouseover),
+                    iScroll.detachEvent(parent, "mouseout", parent.mouseout));
                 d.onselectstart = function() {
                     return false;
                 };
@@ -166,14 +177,16 @@
                     var e = e || w.event;
                     if (isActive) {
                         __cache__.ms_lastpos = e[msToken];
-                        var ms_offset = __cache__.ms_lastpos - __cache__.ms_pos, sb_offsetValue = __cache__.sb_pos + ms_offset, offsetValue;
+                        var ms_offset = __cache__.ms_lastpos - __cache__.ms_pos,
+                            sb_offsetValue = __cache__.sb_pos + ms_offset,
+                            offsetValue;
                         sb_offsetValue < self.CriticalBar.low && (sb_offsetValue = self.CriticalBar.low);
                         sb_offsetValue >= self.CriticalBar.high && (sb_offsetValue = self.CriticalBar.high);
                         offsetValue = ms_offset * self.speed / self.barSpeed;
                         el[direction] = __cache__.els_pos + offsetValue;
                         sb_style[self.direction] = sb_offsetValue + "px";
                     }
-                    e.preventDefault ? e.preventDefault() :e.returnValue = false;
+                    e.preventDefault ? e.preventDefault() : e.returnValue = false;
                 };
                 d.onmouseup = function() {
                     isActive = false;
@@ -187,20 +200,30 @@
                 };
             };
         },
-        bind:function() {
-            var direction = this.direction === "top" ? "scrollTop" :"scrollLeft";
+        bind: function() {
+            var direction = this.direction === "top" ? "scrollTop" : "scrollLeft";
             if (iScroll.isMobile) {
-                var isActive = false, scrollBar = this.scrollBar, __cache__ = this.cache, msToken = this.direction === "top" ? "pageY" :"pageX", el = this.el, parent = el.parentNode, sb_style = this.scrollBar.style, self = this;
+                var isActive = false,
+                    scrollBar = this.scrollBar,
+                    __cache__ = this.cache,
+                    msToken = this.direction === "top" ? "pageY" : "pageX",
+                    el = this.el,
+                    parent = el.parentNode,
+                    sb_style = this.scrollBar.style,
+                    self = this;
                 this.el.addEventListener("touchstart", function(e) {
                     __cache__.ms_pos = e["touches"][0][msToken];
                     isActive = true;
                     d.onselectstart = function() {
                         return false;
                     };
+
                     function _touchmove(e) {
                         if (isActive) {
                             __cache__.ms_lastpos = e["touches"][0][msToken];
-                            var ms_offset = __cache__.ms_pos - __cache__.ms_lastpos, sb_offsetValue = __cache__.sb_pos + ms_offset, offsetValue;
+                            var ms_offset = __cache__.ms_pos - __cache__.ms_lastpos,
+                                sb_offsetValue = __cache__.sb_pos + ms_offset,
+                                offsetValue;
                             sb_offsetValue < self.CriticalBar.low && (sb_offsetValue = self.CriticalBar.low);
                             sb_offsetValue >= self.CriticalBar.high && (sb_offsetValue = self.CriticalBar.high);
                             offsetValue = ms_offset * self.speed / self.barSpeed;
@@ -209,6 +232,7 @@
                         }
                         e.preventDefault();
                     }
+
                     function _touchend() {
                         isActive = false;
                         __cache__.els_pos = el[direction];
@@ -227,15 +251,15 @@
                 this.mousewheel(function(e) {
                     if (e._detail < 0) {
                         this.process({
-                            barSpeed:this.barSpeed,
-                            speed:this.speed,
-                            direction:direction
+                            barSpeed: this.barSpeed,
+                            speed: this.speed,
+                            direction: direction
                         });
                     } else if (e._detail > 0) {
                         this.process({
-                            barSpeed:-this.barSpeed,
-                            speed:-this.speed,
-                            direction:direction
+                            barSpeed: -this.barSpeed,
+                            speed: -this.speed,
+                            direction: direction
                         });
                     }
                 });
@@ -246,7 +270,7 @@
             }
             this.init && this.init();
         },
-        unbindDocumentEvent:function() {
+        unbindDocumentEvent: function() {
             var self = this;
             iScroll.addEvent(this.el, "mouseover", function(e) {
                 var e_target = e.relateTarget || e.fromElement;
@@ -272,76 +296,90 @@
                 }
             });
         },
-        doScrollto:function() {
+        doScrollto: function() {
             /**
              * 重新定位文档以及滚动条的坐标 依赖初始化滚动条
              */
             if (this.scrollTo > this.CriticalEl.high || this.scrollTo < this.CriticalEl.low) {
                 return;
             }
-            var direction = this.direction === "top" ? "scrollTop" :"scrollLeft";
+            var direction = this.direction === "top" ? "scrollTop" : "scrollLeft";
             this.cache.els_pos = this.el[direction] = this.scrollTo;
             this.scrollBar.style[this.direction] = (this.cache.sb_pos += this.scrollTo / this.speed * this.barSpeed) + "px";
         },
-        doAutoScroll:function() {},
-        doBtnEvent:function() {
-            var self = this, el = self.el, timmer;
-            var direction = this.direction === "top" ? "scrollTop" :"scrollLeft";
+        scrollOffset: function(offset) {
+            if (this.scrollTo > this.CriticalEl.high || this.scrollTo < this.CriticalEl.low) {
+                return;
+            }
+            var direction = this.direction === "top" ? "scrollTop" : "scrollLeft";
+            this.cache.els_pos = this.el[direction] = offset;
+            this.scrollBar.style[this.direction] = (this.cache.sb_pos = offset / this.speed * this.barSpeed) + "px";
+        },
+        doAutoScroll: function() {},
+        doBtnEvent: function() {
+            var self = this,
+                el = self.el,
+                timmer;
+            var direction = this.direction === "top" ? "scrollTop" : "scrollLeft";
+
             function mouseCallback(e, type) {
                 var tmpSpeed, barSpeed, step;
-                type === 1 ? (tmpSpeed = self.speed, barSpeed = self.barSpeed, step = 1) :(tmpSpeed = -self.speed, 
-                barSpeed = -self.barSpeed, step = -1);
+                type === 1 ? (tmpSpeed = self.speed, barSpeed = self.barSpeed, step = 1) : (tmpSpeed = -self.speed,
+                    barSpeed = -self.barSpeed, step = -1);
                 (function() {
                     self.process({
-                        direction:direction,
-                        speed:tmpSpeed,
-                        barSpeed:barSpeed
+                        direction: direction,
+                        speed: tmpSpeed,
+                        barSpeed: barSpeed
                     });
                     // tmpSpeed += step;
                     // barSpeed += step;
                     timmer = w.requestAnimationFrame(arguments.callee);
                 })();
             }
-            if(iScroll.isMobile){
-                this.nextBtn.addEventListener('touchstart',function(e){
+            if (iScroll.isMobile) {
+                this.nextBtn.addEventListener('touchstart', function(e) {
                     mouseCallback(e, 1);
                     e.preventDefault();
                 })
-                this.nextBtn.addEventListener('touchend',function(e){
+                this.nextBtn.addEventListener('touchend', function(e) {
                     w.cancelAnimationFrame(timmer);
                 })
-                this.prevBtn.addEventListener('touchstart',function(e){
+                this.prevBtn.addEventListener('touchstart', function(e) {
                     mouseCallback(e, -1);
                     e.preventDefault();
                 })
-                this.prevBtn.addEventListener('touchend',function(e){
+                this.prevBtn.addEventListener('touchend', function(e) {
                     w.cancelAnimationFrame(timmer);
                 })
-            }else{
+            } else {
                 this.nextBtn.onmousedown = function(e) {
                     var e = e || w.event;
-                    mouseCallback(e, 1);
-                    e.preventDefault ? e.preventDefault() :e.returnValue = false;
+                    (e.which === 1 || e.button === 1) && mouseCallback(e, 1);
+                    e.preventDefault ? e.preventDefault() : e.returnValue = false;
                 };
                 this.prevBtn.onmousedown = function(e) {
                     var e = e || w.event;
-                    mouseCallback(e, -1);
-                    e.preventDefault ? e.preventDefault() :e.returnValue = false;
+                    (e.which === 1 || e.button === 1) && mouseCallback(e, -1);
+                    e.preventDefault ? e.preventDefault() : e.returnValue = false;
                 };
                 this.nextBtn.onmouseup = this.prevBtn.onmouseup = function() {
                     w.cancelAnimationFrame(timmer);
-                }; 
-            }        
+                };
+            }
         },
-        barFocus:function() {
-            var self = this, sBar = this.scrollBar.parentNode.style, parent = this.el.parentNode, timmer;
+        barFocus: function() {
+            var self = this,
+                sBar = this.scrollBar.parentNode.style,
+                parent = this.el.parentNode,
+                timmer;
             // fix ie haslayout issue
             sBar.zoom = 1;
             var mouseCallback = function(e, target) {
                 var e = w.event || e;
                 var e_target = e.relatedTarget || e[target];
                 if (iScroll.isContains(parent, e_target)) return;
-                target === "fromElement" ? doAnimate(0, 1) :doAnimate(1, 0);
+                target === "fromElement" ? doAnimate(0, 1) : doAnimate(1, 0);
             };
             parent.mouseover = function(e) {
                 mouseCallback(e, "fromElement");
@@ -349,6 +387,7 @@
             parent.mouseout = function(e) {
                 mouseCallback(e, "toElement");
             };
+
             function doAnimate(start, end) {
                 var step = (end - start) / 16;
                 (function() {
@@ -374,32 +413,38 @@
          * [process 处理滚动条以及文档的位置统一入口]
          * @return {[type]} [description]
          */
-        process:function(obj) {
-            var direction = obj.direction, el = this.el, self = this, sb_style = this.scrollBar.style, __cache__ = this.cache, timmer;
+        process: function(obj) {
+            var direction = obj.direction,
+                el = this.el,
+                self = this,
+                sb_style = this.scrollBar.style,
+                __cache__ = this.cache,
+                timmer;
             __cache__.sb_pos += obj.barSpeed || this.barSpeed;
-            __cache__.sb_pos >= this.CriticalBar.high && (__cache__.sb_pos = this.CriticalBar.high, 
-            __cache__.els_pos = this.CriticalEl.high) && this.done && this.activeType && this.doneCallback(this.done);
-            __cache__.sb_pos < this.CriticalBar.low && (__cache__.sb_pos = this.CriticalBar.low, 
-            __cache__.els_pos = this.CriticalEl.low);
+            __cache__.sb_pos >= this.CriticalBar.high && (__cache__.sb_pos = this.CriticalBar.high,
+                __cache__.els_pos = this.CriticalEl.high) && this.done && this.activeType && this.doneCallback(this.done);
+            __cache__.sb_pos < this.CriticalBar.low && (__cache__.sb_pos = this.CriticalBar.low,
+                __cache__.els_pos = this.CriticalEl.low);
             el[direction] = __cache__.els_pos += obj.speed;
             sb_style[this.direction] = __cache__.sb_pos + "px";
         },
-        doneCallback:function(done) {
+        doneCallback: function(done) {
             var self = this;
             clearTimeout(done.timmer);
             done.timmer = setTimeout(function() {
                 done.call(self);
             }, 50);
         },
-        ajax:function(config) {
+        ajax: function(config) {
             var self = this;
             if (self._callbackLock_) {
                 self._callbackLock_ = false;
                 if (config.type === "jsonp") {
                     /**
-                 * jsonp的实现方式
-                 **/
-                    var script = d.createElement("script"), callbackName = config.callbackName ? config.callbackName :"iScroll" + encodeURIComponent(location.href).replace(/[^\w\s]/g, "");
+                     * jsonp的实现方式
+                     **/
+                    var script = d.createElement("script"),
+                        callbackName = config.callbackName ? config.callbackName : "iScroll" + encodeURIComponent(location.href).replace(/[^\w\s]/g, "");
                     w[callbackName] = function(data) {
                         script.jsonp = 1;
                         // 成功完成的时候执行回调函数onsuccse
@@ -422,6 +467,7 @@
                             errorCallback();
                         };
                     }
+
                     function errorCallback() {
                         if (typeof script.jsonp === "undefined") {
                             config.onerror && config.onerror.call(self);
@@ -434,14 +480,16 @@
                         script.parentNode.removeChild(script);
                         self._callbackLock_ = true;
                     }
-                    script.src = config.url + (config.url.indexOf("?") !== -1 ? "&callback=" :"?callback=") + callbackName;
+                    script.src = config.url + (config.url.indexOf("?") !== -1 ? "&callback=" : "?callback=") + callbackName;
                     d.getElementsByTagName("head")[0].appendChild(script);
                 } else {
                     /**
-                 * 传统ajax的实现
-                 **/
-                    var xhr = w.XMLHttpRequest ? new XMLHttpRequest() :new ActiveXObject("Microsoft.XMLHTTP"), responseType = config.dataType === "text/plain" || typeof config.dataType === "undefined" ? "responseText" :config.dataType === "text/xml" && "responseXML";
-                    xhr.open(config.type ? config.type :"get", config.url, true);
+                     * 传统ajax的实现
+                     **/
+                    var xhr = w.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP"),
+                        responseType = config.dataType === "text/plain" || typeof config.dataType === "undefined" ? "responseText" : config.dataType === "text/xml" && "responseXML",
+                        params = config.params || null;
+                    xhr.open(config.type ? config.type : "get", config.url, true);
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState === 4) {
                             if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
@@ -457,7 +505,7 @@
                         }
                     };
                     config.type === "post" && xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
-                    xhr.send(null);
+                    xhr.send(params);
                 }
             }
         }
@@ -477,12 +525,12 @@
         }
     };
     iScroll.isContains = function(a, b) {
-        return a.contains ? a.contains(b) :a.compareDocumentPosition(b) == 16;
+        return a.contains ? a.contains(b) : a.compareDocumentPosition(b) == 16;
     };
     iScroll.getStyle = function(elem, property) {
-        return elem.style[property] ? elem.style[property] :elem.currentStyle ? elem.currentStyle[property] :window.getComputedStyle(elem, null)[property];
+        return elem.style[property] ? elem.style[property] : elem.currentStyle ? elem.currentStyle[property] : window.getComputedStyle(elem, null)[property];
     };
-    iScroll.isMobile = "ontouchend" in d ? true :false;
+    iScroll.isMobile = "ontouchend" in d ? true : false;
     w.requestAnimationFrame = w.requestAnimationFrame || w.mozRequestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.oRequestAnimationFrame || function(callback) {
         return setTimeout(callback, 1e3 / 60);
     };
@@ -490,7 +538,7 @@
         return clearTimeout(callback, 1e3 / 60);
     };
     var _iScroll = {
-        init:function(config) {
+        init: function(config) {
             return new iScroll(config);
         }
     };

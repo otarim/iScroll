@@ -82,6 +82,10 @@
 **done**
 
 	滚动事件触发的回调，可选
+
+**scrollOffset**
+
+	指定滚动的位置(非初始化操作)
 	
 **this.ajax(for done)**
 	
@@ -89,6 +93,7 @@
 	type	get|post|jsonp,默认get
 	callbackName	callback名字，可选
 	dataType	text/plain | text/xml 默认text/plain，对于传统ajax生效，可选
+	params		post请求体,字符串'name=xxoo&postData=blabla',可选
 	onsuccse	加载完的回调，this指向iScroll实例
 	onprocess	ajax请求进行中触发，this指向iScroll实例
 	onerror	异常处理，返回ajax的异常信息，this指向iScroll实例
@@ -99,7 +104,10 @@
 	
 ##update.log
 ====
-140211更新: touch事件支持
+140211更新: touch事件支持  
+140428更新: 新增scrollOffset方法,现在可以控制滚动的位置了.  
+110428fixed: post提交数据的时候,少了params的发送.....  
+110428fixed: 修复右键滚动控制按钮的错误  
 
 ##usage
 ===
