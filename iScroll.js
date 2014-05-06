@@ -307,13 +307,33 @@
             this.cache.els_pos = this.el[direction] = this.scrollTo;
             this.scrollBar.style[this.direction] = (this.cache.sb_pos += this.scrollTo / this.speed * this.barSpeed) + "px";
         },
-        scrollOffset: function(offset) {
+        scrollOffset: function(offset, delay) {
+            var self = this,
+                direction = this.direction === "top" ? "scrollTop" : "scrollLeft",
+                animate, step, startTime;
             if (this.scrollTo > this.CriticalEl.high || this.scrollTo < this.CriticalEl.low) {
                 return;
             }
-            var direction = this.direction === "top" ? "scrollTop" : "scrollLeft";
-            this.cache.els_pos = this.el[direction] = offset;
-            this.scrollBar.style[this.direction] = (this.cache.sb_pos = offset / this.speed * this.barSpeed) + "px";
+            if (delay) {
+                this.offsetTimmer && clearTimeout(self.offsetTimmer);
+                step = (offset - this.cache.els_pos) / delay * 24;
+                startTime = +new Date;
+                animate = function() {
+                    if (+new Date - startTime < delay) {
+                        self.el[direction] = self.cache.els_pos += step;
+                        self.scrollBar.style[self.direction] = (self.cache.sb_pos = self.cache.els_pos / self.speed * self.barSpeed) + "px";
+                        self.offsetTimmer = setTimeout(animate, 24);
+                    } else {
+                        clearTimeout(self.offsetTimmer);
+                        self.cache.els_pos = self.el[direction] = offset;
+                        self.scrollBar.style[self.direction] = (self.cache.sb_pos = offset / self.speed * self.barSpeed) + "px";
+                    }
+                }
+                animate();
+            } else {
+                this.cache.els_pos = this.el[direction] = offset;
+                this.scrollBar.style[this.direction] = (this.cache.sb_pos = offset / this.speed * this.barSpeed) + "px";
+            }
         },
         doAutoScroll: function() {},
         doBtnEvent: function() {
@@ -510,6 +530,7 @@
             }
         }
     };
+    iScroll.prototype.constructor = iScroll;
     iScroll.addEvent = function(obj, event, callback) {
         if (typeof addEventListener === "function") {
             return obj.addEventListener(event, callback, false);
@@ -528,7 +549,7 @@
         return a.contains ? a.contains(b) : a.compareDocumentPosition(b) == 16;
     };
     iScroll.getStyle = function(elem, property) {
-        return elem.style[property] ? elem.style[property] : elem.currentStyle ? elem.currentStyle[property] : window.getComputedStyle(elem, null)[property];
+        return elem.style[property] ? elem.style[property] : elem.currentStyle ? elem.currentStyle[property] : w.getComputedStyle(elem, null)[property];
     };
     iScroll.isMobile = "ontouchend" in d ? true : false;
     w.requestAnimationFrame = w.requestAnimationFrame || w.mozRequestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.oRequestAnimationFrame || function(callback) {
@@ -539,7 +560,19 @@
     };
     var _iScroll = {
         init: function(config) {
-            return new iScroll(config);
+            var iscroll =  new iScroll(config);
+            // es5 only
+            if(typeof Object.defineProperty === 'function' && typeof Object.propertyIsEnumerable === 'function'){
+                var props = ['CriticalBar','CriticalEl','_callbackLock_','cache'];
+                props.forEach(function(prop){
+                    Object.defineProperty(iscroll,prop,{
+                        writable: true,
+                        enumerable: false,
+                        configurable: false
+                    })
+                })
+            }
+            return iscroll;
         }
     };
     w.iScroll = _iScroll;

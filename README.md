@@ -83,8 +83,10 @@
 
 	滚动事件触发的回调，可选
 
-**scrollOffset**
+**scrollOffset(offset,delay)**
 
+	offset 滚动到的位置(相对于主视图而不是滚动条)
+	delay 持续时间，可选	
 	指定滚动的位置(非初始化操作)
 	
 **this.ajax(for done)**
@@ -104,10 +106,11 @@
 	
 ##update.log
 ====
-140211更新: touch事件支持  
-140428更新: 新增scrollOffset方法,现在可以控制滚动的位置了.  
+140211add: touch事件支持  
+140428add: 新增scrollOffset方法,现在可以控制滚动的位置了.  
 140428fixed: post提交数据的时候,少了params的发送.....  
-140428fixed: 修复右键滚动控制按钮的错误  
+140428fixed: 修复右键滚动控制按钮的错误
+140428add: 新增scrollOffset的 delay 参数，实现平滑过渡
 
 ##usage
 ===
