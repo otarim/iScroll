@@ -560,12 +560,12 @@
     };
     var _iScroll = {
         init: function(config) {
-            var iscroll =  new iScroll(config);
+            var iscroll = new iScroll(config);
             // es5 only
-            if(typeof Object.defineProperty === 'function' && typeof Object.propertyIsEnumerable === 'function'){
-                var props = ['CriticalBar','CriticalEl','_callbackLock_','cache'];
-                props.forEach(function(prop){
-                    Object.defineProperty(iscroll,prop,{
+            if (typeof Object.defineProperty === 'function' && typeof Object.propertyIsEnumerable === 'function') {
+                var props = ['CriticalBar', 'CriticalEl', '_callbackLock_', 'cache'];
+                props.forEach(function(prop) {
+                    Object.defineProperty(iscroll, prop, {
                         writable: true,
                         enumerable: false,
                         configurable: false
