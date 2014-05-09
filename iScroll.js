@@ -562,7 +562,7 @@
         init: function(config) {
             var iscroll = new iScroll(config);
             // es5 only
-            if (typeof Object.defineProperty === 'function' && typeof Object.propertyIsEnumerable === 'function') {
+            if (typeof Object.defineProperty === 'function' && -[1,]) {
                 var props = ['CriticalBar', 'CriticalEl', '_callbackLock_', 'cache'];
                 props.forEach(function(prop) {
                     Object.defineProperty(iscroll, prop, {

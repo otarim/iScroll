@@ -64,7 +64,7 @@
 <script src="iScroll.js"></script>
 <script>
 	var contentArea = document.getElementById('inner-content2');
-	iScroll.init({
+	var xx = iScroll.init({
         el: document.getElementById('inner-content'),
         scrollBar: document.getElementById('tool-bar')
     })
@@ -97,5 +97,8 @@
             })
         }
     })
+    setTimeout(function(){
+    	xx.scrollOffset(300,200)
+    },1000)
 </script>
 </html>
