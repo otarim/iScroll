@@ -1,8 +1,9 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="gb2312">
+	<meta charset="utf-8">
 	<title>Document</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<style>
 	* {margin: 0;padding: 0;}
 	ul {list-style: none;}
@@ -66,7 +67,11 @@
 	var contentArea = document.getElementById('inner-content2');
 	var xx = iScroll.init({
         el: document.getElementById('inner-content'),
-        scrollBar: document.getElementById('tool-bar')
+        scrollBar: document.getElementById('tool-bar'),
+        activeDirection: 'up',
+        done: function(){
+        	alert('xxx')
+        }
     })
     iScroll.init({
         el: document.getElementById('inner-content2'),

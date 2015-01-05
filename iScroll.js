@@ -1,5 +1,5 @@
 /**
- * [Ä£Äâ¹ö¶¯Ìõ]
+ * [æ¨¡æ‹Ÿæ»šåŠ¨æ¡]
  * @author otarim
  */
 (function(w, d, undefined) {
@@ -19,13 +19,14 @@
         this.init = CONFIG["init"];
         this.ajaxBtn = CONFIG["ajaxBtn"];
         this.done = CONFIG["done"];
+        this.activeDirection = CONFIG.activeDirection || 'down';
         /**
-         * [_callbackLock_»Øµ÷Ëø£¬¹ö¶¯Ã¿´Î»Øµ÷¶¼Ö»ÄÜ´¥·¢Ò»´Î£¬Á¬½Ó¹Ø±ÕÖ®ºóÖØÖÃËø×´Ì¬]
+         * [_callbackLock_å›žè°ƒé”ï¼Œæ»šåŠ¨æ¯æ¬¡å›žè°ƒéƒ½åªèƒ½è§¦å‘ä¸€æ¬¡ï¼Œè¿žæŽ¥å…³é—­ä¹‹åŽé‡ç½®é”çŠ¶æ€]
          * @type {Boolean}
          */
         this._callbackLock_ = true;
         /**
-         * [cache Êó±ê½»»¥ÒÔ¼°¹ö¶¯Ç°ºóµÄ»º´æ£¬°üÀ¨¹ö¶¯ÌõµÄ×îºó¸ß¶ÈÒÔ¼°ÎÄµµµÄ×îºó¸ß¶È]
+         * [cache é¼ æ ‡äº¤äº’ä»¥åŠæ»šåŠ¨å‰åŽçš„ç¼“å­˜ï¼ŒåŒ…æ‹¬æ»šåŠ¨æ¡çš„æœ€åŽé«˜åº¦ä»¥åŠæ–‡æ¡£çš„æœ€åŽé«˜åº¦]
          * @type {Object}
          */
         this.cache = {
@@ -35,7 +36,7 @@
             ms_lastpos: 0
         };
         /**
-         * [CriticalBar ÁÙ½ç´¦Àí]
+         * [CriticalBar ä¸´ç•Œå¤„ç†]
          * @type {Object}
          */
         this.CriticalBar = {
@@ -63,14 +64,14 @@
             if (this.done) {
                 this.done.timmer = null;
                 /**
-                 * [activeType »Øµ÷º¯ÊýdoneµÄ´¥·¢·½Ê½]
-                 * @type {0: µã»÷´¥·¢;1: ¹ö¶¯´¥·¢}
+                 * [activeType å›žè°ƒå‡½æ•°doneçš„è§¦å‘æ–¹å¼]
+                 * @type {0: ç‚¹å‡»è§¦å‘;1: æ»šåŠ¨è§¦å‘}
                  */
                 if (this.ajaxBtn) {
                     var self = this;
                     this.activeType = 0;
                     /**
-                     * °ó¶¨»Øµ÷º¯Êý
+                     * ç»‘å®šå›žè°ƒå‡½æ•°
                      */
                     iScroll.addEvent(this.ajaxBtn, "click", function(e) {
                         self.doneCallback(self.done);
@@ -80,7 +81,7 @@
                     this.activeType = 1;
                 }
             }
-            // ³õÊ¼»¯¹ö¶¯Ìõ´óÐ¡
+            // åˆå§‹åŒ–æ»šåŠ¨æ¡å¤§å°
             this.initScrollBar();
             this.bind();
         },
@@ -103,7 +104,7 @@
         initScrollBar: function() {
             this.buildBar();
             /**
-             * ³õÊ¼»¯¹ö¶¯ÌõÍÏ¶¯ÊÂ¼þ
+             * åˆå§‹åŒ–æ»šåŠ¨æ¡æ‹–åŠ¨äº‹ä»¶
              */
             if (!iScroll.isMobile) {
                 this.initDrag();
@@ -120,11 +121,11 @@
                 ep_style.cssText += ";position: absolute;visibility:hidden;display:block;";
             }
             /**
-             * ÐÞ¸´ÂË¾µÔÚie8ÏÂµÄÎÊÌâ£¬ie8ÒÔÉÏä¯ÀÀÆ÷Î´¶¨Òåzindex·µ»Ø"" ie8ÒÔÏÂ·µ»Ø0£¬¹ö»ØµÍ°æ±¾ie
+             * ä¿®å¤æ»¤é•œåœ¨ie8ä¸‹çš„é—®é¢˜ï¼Œie8ä»¥ä¸Šæµè§ˆå™¨æœªå®šä¹‰zindexè¿”å›ž"" ie8ä»¥ä¸‹è¿”å›ž0ï¼Œæ»šå›žä½Žç‰ˆæœ¬ie
              */
             navigator.userAgent.indexOf("MSIE 8.0") !== -1 && !iScroll.getStyle(this.scrollBar.parentNode, "z-index") && (this.scrollBar.parentNode.style.zIndex = 0);
             /**
-             * ³õÊ¼»¯¹ö¶¯Ìõ
+             * åˆå§‹åŒ–æ»šåŠ¨æ¡
              */
             var initOffset = this.direction === "top" ? "offsetHeight" : "offsetWidth",
                 sb_style = this.scrollBar.style;
@@ -140,13 +141,13 @@
             this.cache.sb_pos = Math.floor(this.cache.els_pos * compareOffset / this.elHeight) + this.CriticalBar.low;
             sb_style[this.direction] = this.cache.sb_pos + "px";
             /**
-             * [¹ö¶¯Ìõ×ÔÉí¸ß¶È]
+             * [æ»šåŠ¨æ¡è‡ªèº«é«˜åº¦]
              * @type {[type]}
              */
             sb_style[sbOffset] = Math.floor(eloffsetHeight * compareOffset / this.elHeight) + "px";
             this.CriticalBar.high = compareOffset - parseInt(sb_style[sbOffset], 10) + this.CriticalBar.low;
             /**
-             * [¹ö¶¯ÌõËÙ¶È]
+             * [æ»šåŠ¨æ¡é€Ÿåº¦]
              * @type {[type]}
              */
             this.barSpeed = (compareOffset - this.scrollBar[initOffset]) * this.speed / (this.CriticalEl.high = this.elHeight - eloffsetHeight,
@@ -160,6 +161,8 @@
                 __cache__ = this.cache,
                 direction = this.direction === "top" ? "scrollTop" : "scrollLeft",
                 msToken = this.direction === "top" ? "clientY" : "clientX",
+                activeDirection = this.activeDirection,
+                doCallback = false,
                 el = this.el,
                 parent = el.parentNode,
                 sb_style = this.scrollBar.style,
@@ -196,7 +199,8 @@
                         d.onselectstart = d.onmouseup = d.onmousemove = undefined;
                     } catch (e) {}
                     parent.mouseout && (iScroll.addEvent(parent, "mouseover", parent.mouseover), iScroll.addEvent(parent, "mouseout", parent.mouseout));
-                    __cache__.els_pos === self.CriticalEl.high && self.done && self.activeType && self.doneCallback(self.done);
+                    doCallback = (activeDirection === 'up' ? __cache__.sb_pos === self.CriticalBar.low : __cache__.sb_pos === self.CriticalBar.high)
+                    doCallback && self.done && self.activeType && self.doneCallback(self.done);
                 };
             };
         },
@@ -207,6 +211,8 @@
                     scrollBar = this.scrollBar,
                     __cache__ = this.cache,
                     msToken = this.direction === "top" ? "pageY" : "pageX",
+                    activeDirection = this.activeDirection,
+                    doCallback = false,
                     el = this.el,
                     parent = el.parentNode,
                     sb_style = this.scrollBar.style,
@@ -242,7 +248,8 @@
                             self.el.removeEventListener("touchmove", _touchmove, false);
                             self.el.removeEventListener("touchend", _touchend, false);
                         } catch (e) {}
-                        __cache__.els_pos === self.CriticalEl.high && self.done && self.activeType && self.doneCallback(self.done);
+                        doCallback = (activeDirection === 'up' ? __cache__.sb_pos === self.CriticalBar.low : __cache__.sb_pos === self.CriticalBar.high)
+                        doCallback && self.done && self.activeType && self.doneCallback(self.done);
                     }
                     self.el.addEventListener("touchmove", _touchmove, false);
                     self.el.addEventListener("touchend", _touchend, false);
@@ -264,7 +271,7 @@
                     }
                 });
                 /**
-                 * Êó±êÒÆ¶¯µ½¿É¹ö¶¯ÔªËØÉÏÃæµÄÊ±ºò£¬È¡Ïû×ÀÃæµÄ¹ö¶¯ÊÂ¼þ
+                 * é¼ æ ‡ç§»åŠ¨åˆ°å¯æ»šåŠ¨å…ƒç´ ä¸Šé¢çš„æ—¶å€™ï¼Œå–æ¶ˆæ¡Œé¢çš„æ»šåŠ¨äº‹ä»¶
                  */
                 this.unbindDocumentEvent();
             }
@@ -298,7 +305,7 @@
         },
         doScrollto: function() {
             /**
-             * ÖØÐÂ¶¨Î»ÎÄµµÒÔ¼°¹ö¶¯ÌõµÄ×ø±ê ÒÀÀµ³õÊ¼»¯¹ö¶¯Ìõ
+             * é‡æ–°å®šä½æ–‡æ¡£ä»¥åŠæ»šåŠ¨æ¡çš„åæ ‡ ä¾èµ–åˆå§‹åŒ–æ»šåŠ¨æ¡
              */
             if (this.scrollTo > this.CriticalEl.high || this.scrollTo < this.CriticalEl.low) {
                 return;
@@ -430,11 +437,13 @@
             iScroll.addEvent(parent, "mouseout", parent.mouseout);
         },
         /**
-         * [process ´¦Àí¹ö¶¯ÌõÒÔ¼°ÎÄµµµÄÎ»ÖÃÍ³Ò»Èë¿Ú]
+         * [process å¤„ç†æ»šåŠ¨æ¡ä»¥åŠæ–‡æ¡£çš„ä½ç½®ç»Ÿä¸€å…¥å£]
          * @return {[type]} [description]
          */
         process: function(obj) {
             var direction = obj.direction,
+                activeDirection = this.activeDirection,
+                doCallback = false,
                 el = this.el,
                 self = this,
                 sb_style = this.scrollBar.style,
@@ -442,11 +451,13 @@
                 timmer;
             __cache__.sb_pos += obj.barSpeed || this.barSpeed;
             __cache__.sb_pos >= this.CriticalBar.high && (__cache__.sb_pos = this.CriticalBar.high,
-                __cache__.els_pos = this.CriticalEl.high) && this.done && this.activeType && this.doneCallback(this.done);
+                __cache__.els_pos = this.CriticalEl.high);
             __cache__.sb_pos < this.CriticalBar.low && (__cache__.sb_pos = this.CriticalBar.low,
                 __cache__.els_pos = this.CriticalEl.low);
             el[direction] = __cache__.els_pos += obj.speed;
             sb_style[this.direction] = __cache__.sb_pos + "px";
+            doCallback = (activeDirection === 'up' ? __cache__.sb_pos === this.CriticalBar.low : __cache__.sb_pos === this.CriticalBar.high)
+            doCallback && this.done && this.activeType && this.doneCallback(this.done)
         },
         doneCallback: function(done) {
             var self = this;
@@ -461,15 +472,15 @@
                 self._callbackLock_ = false;
                 if (config.type === "jsonp") {
                     /**
-                     * jsonpµÄÊµÏÖ·½Ê½
+                     * jsonpçš„å®žçŽ°æ–¹å¼
                      **/
                     var script = d.createElement("script"),
                         callbackName = config.callbackName ? config.callbackName : "iScroll" + encodeURIComponent(location.href).replace(/[^\w\s]/g, "");
                     w[callbackName] = function(data) {
                         script.jsonp = 1;
-                        // ³É¹¦Íê³ÉµÄÊ±ºòÖ´ÐÐ»Øµ÷º¯Êýonsuccse
-                        // »Øµ÷»áÔÚonloadÖ®Ç°Ö´ÐÐ
-                        // onloadÖ®ºóµÄÊÇÅÐ¶ÏÊÇ·ñÓÐjsonpµÄtoken£¬ÓÐµÄ»°Çå³ýscript±êÇ©£¬Ã»ÓÐµÄ»°£¬ËµÃ÷Ã»ÓÐ¾­¹ý»Øµ÷º¯ÊýÕâÒ»²½£¬Ö´ÐÐerrorº¯Êý
+                        // æˆåŠŸå®Œæˆçš„æ—¶å€™æ‰§è¡Œå›žè°ƒå‡½æ•°onsuccse
+                        // å›žè°ƒä¼šåœ¨onloadä¹‹å‰æ‰§è¡Œ
+                        // onloadä¹‹åŽçš„æ˜¯åˆ¤æ–­æ˜¯å¦æœ‰jsonpçš„tokenï¼Œæœ‰çš„è¯æ¸…é™¤scriptæ ‡ç­¾ï¼Œæ²¡æœ‰çš„è¯ï¼Œè¯´æ˜Žæ²¡æœ‰ç»è¿‡å›žè°ƒå‡½æ•°è¿™ä¸€æ­¥ï¼Œæ‰§è¡Œerrorå‡½æ•°
                         config.onsuccse && config.onsuccse.call(self, data);
                         self._callbackLock_ = true;
                         self.buildBar();
@@ -504,7 +515,7 @@
                     d.getElementsByTagName("head")[0].appendChild(script);
                 } else {
                     /**
-                     * ´«Í³ajaxµÄÊµÏÖ
+                     * ä¼ ç»Ÿajaxçš„å®žçŽ°
                      **/
                     var xhr = w.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP"),
                         responseType = config.dataType === "text/plain" || typeof config.dataType === "undefined" ? "responseText" : config.dataType === "text/xml" && "responseXML",
@@ -518,7 +529,7 @@
                             } else {
                                 config.onerror && config.onerror.call(self, xhr.statusText);
                             }
-                            /*ÖØÖÃ»Øµ÷Ëø*/
+                            /*é‡ç½®å›žè°ƒé”*/
                             self._callbackLock_ = true;
                         } else if (xhr.readyState === 3) {
                             config.onprocess && config.onprocess.call(self);

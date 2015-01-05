@@ -48,6 +48,10 @@
 **direction**	
 
 	滚动方向 [top left] 默认top
+
+**activeDirection**
+
+	回调触发方式（up 为上（左）拉，down 为下（右）拉）默认 down
 	
 **scrollBar**
 
@@ -111,6 +115,7 @@
 140428fixed: post提交数据的时候,少了params的发送.....  
 140428fixed: 修复右键滚动控制按钮的错误
 140428add: 新增scrollOffset的 delay 参数，实现平滑过渡
+150105add: 新增activeDirection参数用于指定触发操作（下拉，上拉）
 
 ##usage
 ===
